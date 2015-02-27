@@ -13,6 +13,7 @@
   "author": "Cody Stoltman <particlebanana@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "async": "^0.9.0",
     "machine": "^3.0.0",
     "pg": "^4.3.0"
   },
@@ -23,7 +24,8 @@
     "friendlyName": "machinepack-postgresql",
     "machineDir": "machines/",
     "machines": [
-      "list-tables"
+      "list-tables",
+      "describe-table"
     ]
   }
 }
