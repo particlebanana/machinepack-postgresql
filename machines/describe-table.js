@@ -51,6 +51,7 @@ module.exports = {
       example: [{
         fieldName: 'birthday',
         type: 'string', // number, string, boolean, dictionary, or array
+        dbType: 'timezone with timestamp',
         indexed: true,
         unique: true,
         primaryKey: false,
@@ -76,7 +77,7 @@ module.exports = {
     var query = "SELECT x.nspname || '.' || x.relname as \"Table\", x.attnum as \"#\", x.attname as \"Column\", x.\"Type\"," +
       " case x.attnotnull when true then 'NOT NULL' else '' end as \"NULL\", r.conname as \"Constraint\", r.contype as \"C\", " +
       "r.consrc, fn.nspname || '.' || f.relname as \"F Key\", d.adsrc as \"Default\" FROM (" +
-      "SELECT c.oid, a.attrelid, a.attnum, n.nspname, c.relname, a.attname, pg_catalog.format_type(a.atttypid, a.atttypmod) as \"Type\", " +
+      "SELECT c.oid, a.attrelid, a.attnum, n.nspname, c.relname, a.attname, pg_catalog.format_type(a.atttypid, null) as \"Type\", " +
       "a.attnotnull FROM pg_catalog.pg_attribute a, pg_namespace n, pg_class c WHERE a.attnum > 0 AND NOT a.attisdropped AND a.attrelid = c.oid " +
       "and c.relkind not in ('S','v') and c.relnamespace = n.oid and n.nspname not in ('pg_catalog','pg_toast','information_schema')) x " +
       "left join pg_attrdef d on d.adrelid = x.attrelid and d.adnum = x.attnum " +
@@ -173,7 +174,65 @@ module.exports = {
           obj.fieldName = column.Column;
 
           // Set Type
-          obj.type = column.Type;
+          switch(column.Type) {
+
+            // Number types
+            case 'smallint':
+            case 'integer':
+            case 'bigint':
+            case 'decimal':
+            case 'numeric':
+            case 'real':
+            case 'double precision':
+            case 'smallserial':
+            case 'bigserial':
+              obj.type = 'number';
+              break;
+
+            // String types
+            case 'character':
+            case 'char':
+            case 'varchar':
+            case 'character varying':
+            case 'text':
+              obj.type = 'string';
+              break;
+
+            // Date types
+            case 'timestamp':
+            case 'timestamp without time zone':
+            case 'timestamp with time zone':
+            case 'time':
+            case 'time without time zone':
+            case 'time with time zone':
+            case 'date':
+            case 'interval':
+              obj.type = 'string';
+              break;
+
+            // Boolean type
+            case 'boolean':
+              obj.type = 'boolean';
+              break;
+
+            // JSON type
+            case 'json':
+              obj.type = 'dictionary';
+              break;
+
+            // Array types
+            case 'array':
+              obj.type = 'array';
+              break;
+
+            // Everything else make a string
+            default:
+              obj.type = 'string';
+              break;
+          };
+
+          // Store the original db type as well
+          obj.dbType = column.Type;
 
           // Check for index
           if(column.indexed) {
