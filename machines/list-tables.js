@@ -61,11 +61,11 @@ module.exports = {
       var query = "SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema'";
       client.query(query, function(err, results) {
 
+        client.end();
+
         if(err) {
           return exits.error(err);
         }
-
-        client.end();
 
         // Build an array of tablenames
         results.rows = results.rows || [];
