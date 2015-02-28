@@ -115,18 +115,19 @@ module.exports = {
 
     // Dependencies
     var pg = require('pg');
-    var async = require('async');
     var wlSQL = require('waterline-sequel');
 
     // Rename inputs for clarity
     var table = inputs.table;
     var schema = inputs.schema;
-    var query = inputs.query || {};
+    var query = {
+      where: inputs.query || null
+    };
 
-    // Normalize query to work with wl sequel
-    if(!query.where) {
-      query.where = null;
-    }
+    if(inputs.limit) query.limit = inputs.limit;
+    if(inputs.skip) query.skip = inputs.skip;
+    if(inputs.sort) query.sort = inputs.sort;
+
 
     // WL SQL options
     var sqlOptions = {
