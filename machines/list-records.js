@@ -43,13 +43,13 @@ module.exports = {
 
     sort: {
       description: 'If specified, the rows coming back from the query will be sorted according to this dictionary.',
-      typeclass: 'dictionary'
+      example: [{ columnName: 'foo', direction: 1 }]
     },
 
     schema: {
       description: 'An example indicating what each returned row should look like.',
       extendedDescription: 'This is used to determine the `columns` (i.e. projection) passed in w/ the query.',
-      typeclass: 'array',
+      example: [{ fieldName: 'username', type: 'string' }],
       required: true
     }
 
@@ -99,7 +99,7 @@ module.exports = {
 
             // Must be a stringified version
             case 'array':
-              example[column.fieldName] = '[1,2,3]';
+              example[column.fieldName] = '[1]';
               break;
           };
         });
@@ -126,8 +126,14 @@ module.exports = {
 
     if(inputs.limit) query.limit = inputs.limit;
     if(inputs.skip) query.skip = inputs.skip;
-    if(inputs.sort) query.sort = inputs.sort;
+    if(inputs.sort) {
+      query.sort = {};
 
+      // Parse array and turn into a WL sort criteria
+      inputs.sort.forEach(function(sorter) {
+        query.sort[sorter.columnName] = sorter.direction;
+      });
+    }
 
     // WL SQL options
     var sqlOptions = {
