@@ -43,13 +43,13 @@ module.exports = {
 
     sort: {
       description: 'If specified, the rows coming back from the query will be sorted according to this dictionary.',
-      example: [{ columnName: 'foo', direction: 1 }]
+      typeclass: 'array'
     },
 
     schema: {
       description: 'An example indicating what each returned row should look like.',
       extendedDescription: 'This is used to determine the `columns` (i.e. projection) passed in w/ the query.',
-      example: [{ fieldName: 'username', type: 'string' }],
+      typeclass: 'array',
       required: true
     }
 
