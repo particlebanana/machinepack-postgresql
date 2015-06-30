@@ -1,6 +1,6 @@
 {
   "name": "machinepack-postgresql",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Structured Node.js bindings for Postgresql.",
   "scripts": {
     "test": "node ./node_modules/test-machinepack-mocha/bin/testmachinepack-mocha.js"
