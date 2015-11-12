@@ -25,10 +25,6 @@
     "friendlyName": "machinepack-postgresql",
     "machineDir": "machines/",
     "machines": [
-      "list-tables",
-      "describe-table",
-      "list-records",
-      "count-records"
     ],
     "testsUrl": "https://travis-ci.org/particlebanana/machinepack-postgresql"
   },
