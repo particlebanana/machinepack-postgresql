@@ -25,6 +25,13 @@ module.exports = {
       description: 'A sequel query that can be run on the database',
       example: 'SELECT * FROM table',
       required: true
+    },
+
+    values: {
+      description: 'An array that will be sent along with the query providing protection against SQL injection attacks.',
+      extendedDescription: 'Provides the ability to run parameterized queries by replacing the value in a query with $1 where the number is the array index of the value.',
+      example: ['*'],
+      defaultsTo: []
     }
 
   },
@@ -45,8 +52,9 @@ module.exports = {
 
     var client = inputs.connection;
     var query = inputs.query;
+    var values = inputs.values;
 
-    client.query(query, function(err, result) {
+    client.query(query, values, function(err, result) {
       if(err) {
         return exits.error(err);
       }
