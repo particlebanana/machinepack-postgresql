@@ -31,7 +31,7 @@ module.exports = {
 
     success: {
       variableName: 'result',
-      description: 'Done.',
+      description: 'An open PostgreSQL connection.',
       example: {
         client: '===',
         release: '==='
@@ -40,18 +40,21 @@ module.exports = {
 
     invalidConnection: {
       description: 'The connection string was incorrect or a client could not connect.'
+    },
+
+    error: {
+      description: 'An unexpected error occurred.'
     }
 
   },
 
 
-  fn: function(inputs, exits) {
-
+  fn: function getConnection(inputs, exits) {
     var pg = require('pg');
     var conString = inputs.connectionString;
 
-    pg.connect(conString, function(err, client, done) {
-      if(err) {
+    pg.connect(conString, function connect(err, client, done) {
+      if (err) {
         return exits.invalidConnection();
       }
 
@@ -61,5 +64,6 @@ module.exports = {
       });
     });
   }
+
 
 };

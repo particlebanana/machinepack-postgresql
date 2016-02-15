@@ -1,10 +1,14 @@
 language: node_js
-
 node_js:
-  - "0.10"
+  - "5"
+  - "4"
   - "0.12"
-
-# whitelisted branches
-branches:
-  only:
-    - master
+sudo: false
+services:
+  - postgresql
+addons:
+  postgresql: "9.4"
+env:
+  - DB_USER=postgres DB_PASS=''
+before_script:
+  - psql -c 'create database mppg;' -U postgres

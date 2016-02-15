@@ -28,17 +28,21 @@ module.exports = {
 
     success: {
       variableName: 'result',
-      description: 'Done.',
+      description: 'Done.'
     },
 
+    error: {
+      variableName: 'error',
+      description: 'An unexpected error occured.'
+    }
+
   },
 
 
-  fn: function(inputs, exits) {
+  fn: function releaseConnection(inputs, exits) {
     inputs.release();
     return exits.success();
-  },
-
+  }
 
 
 };
