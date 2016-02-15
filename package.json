@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "Run queries against a Postgresql database.",
   "scripts": {
-    "test": "node ./node_modules/test-machinepack-mocha/bin/testmachinepack-mocha.js"
+    "test": "node ./node_modules/mocha/bin/mocha --recursive",
+    "fasttest": "node ./node_modules/mocha/bin/mocha --recursive",
+    "pretest": "npm run lint",
+    "lint": "eslint machines test"
   },
   "keywords": [
     "Postgresql",
@@ -13,19 +16,26 @@
   "author": "Cody Stoltman <particlebanana@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "machine": "^10.0.0",
-    "pg": "^4.4.3"
+    "machine": "10.4.0",
+    "machinepack-sql-builder": "particlebanana/waterline-query-builder",
+    "pg": "4.4.6"
   },
   "devDependencies": {
-    "test-machinepack-mocha": "^2.0.0"
+    "eslint": "1.10.3",
+    "espree": "3.0.1",
+    "mocha": "2.3.4"
   },
   "machinepack": {
     "friendlyName": "Postgresql",
     "machineDir": "machines/",
     "machines": [
+      "compile-query",
+      "execute-query",
       "get-connection",
       "release-connection",
-      "run-query"
+      "run-query",
+      "send-native-query",
+      "send-query"
     ]
   }
 }

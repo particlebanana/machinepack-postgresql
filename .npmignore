@@ -12,7 +12,7 @@ nbproject
 .git
 .gitignore
 .tmp
-.jshintrc
+.eslintrc
 .editorconfig
 CONTRIBUTING.md
 *.md
