@@ -1,0 +1,12 @@
+adapter:
+  build: .
+  volumes:
+   - .:/usr/src/app
+  links:
+   - postgres
+postgres:
+  image: postgres:9.4
+  environment:
+   - POSTGRES_PASSWORD=mp
+   - POSTGRES_USER=mp
+   - POSTGRES_DB=mppg
