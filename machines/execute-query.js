@@ -50,7 +50,13 @@ module.exports = {
     malformed: {
       variableName: 'malformed',
       description: 'A malformed query was used and could not be run.'
+    },
+
+    couldNotReleaseConnection: {
+      variableName: 'releaseConnection',
+      description: 'An error occured releasing the connection.'
     }
+
   },
 
 
@@ -92,7 +98,7 @@ module.exports = {
               release: connection.release
             }).exec({
               error: function error() {
-                return exits.malfored(err);
+                return exits.couldNotReleaseConnection(err);
               },
               success: function success() {
                 return exits.malformed(err);
