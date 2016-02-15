@@ -7,7 +7,7 @@ module.exports = {
   description: 'Get a connection from a connection pool.',
 
 
-  extendedDescription: 'If a pool has not been created, a new one will be made.',
+  extendedDescription: 'If a pool has not been created, a new one will be made. See https://github.com/brianc/node-postgres/wiki/pg#connectstring-connectionstring-function-callback for more.',
 
 
   cacheable: false,

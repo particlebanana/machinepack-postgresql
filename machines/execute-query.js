@@ -35,7 +35,10 @@ module.exports = {
     success: {
       variableName: 'result',
       description: 'The resuts of the query.',
-      example: [{}]
+      example: {
+        results: [{}],
+        meta: {}
+      }
     },
 
     error: {
