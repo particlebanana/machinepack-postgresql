@@ -1,6 +1,6 @@
 {
   "name": "machinepack-postgresql",
-  "version": "1.0.0",
+  "version": "1.0.0-pre1",
   "description": "Run queries against a Postgresql database.",
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha --recursive",
