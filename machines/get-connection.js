@@ -91,6 +91,8 @@ module.exports = {
         if (err) { console.warn('Error details:',err); }
         // If this gets annoying (since it's almost always accompanied by the other warning below)
         // then we could remove the per-connection warning and make it silent for now.
+
+        // To test re: performance: should we call `done()` here?
       });
 
       // We must also bind a handler to the module global (`pg`) in order to handle
