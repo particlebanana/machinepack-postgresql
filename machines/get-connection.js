@@ -87,9 +87,10 @@ module.exports = {
       // Bind "error" handler to prevent crashing the process if the database server crashes.
       // See https://github.com/mikermcneil/waterline-query-builder/blob/master/docs/errors.md#when-a-connection-is-interrupted
       client.on('error', function (err){
-        // For now, we log a warning when this happens.
         console.warn('Warning: Connection to PostgreSQL database was lost. Did the database server go offline?');
         if (err) { console.warn('Error details:',err); }
+        // If this gets annoying (since it's almost always accompanied by the other warning below)
+        // then we could remove the per-connection warning and make it silent for now.
       });
 
       // We must also bind a handler to the module global (`pg`) in order to handle
