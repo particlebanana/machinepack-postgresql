@@ -1,34 +1,26 @@
 module.exports = {
 
 
-  friendlyName: 'Send Native Query',
+  friendlyName: 'Send native query',
 
 
-  description: 'Send a compiled query to the PostgreSQL database.',
-
-
-  cacheable: false,
-
-
-  sync: false,
+  description: 'Send a native query to the PostgreSQL database.',
 
 
   inputs: {
 
-    connection: {
-      description: 'A PG client to use for running the query.',
-      example: '===',
+    connection:
+      require('../constants/connection.input'),
+
+    nativeQuery: {
+      description: 'A native query for the database.',
+      extendedDescription: 'This is oftentimes compiled from Waterline query syntax using "Compile statement", however it could also originate from userland code.',
+      example: '*',
       required: true
     },
 
-    compiledQuery: {
-      description: 'A compiled query object.',
-      example: {
-        query: 'Select * from users',
-        bindings: ['user']
-      },
-      required: true
-    }
+    meta:
+      require('../constants/meta.input')
 
   },
 
@@ -36,30 +28,52 @@ module.exports = {
   exits: {
 
     success: {
-      variableName: 'result',
-      description: 'The results of the query.',
-      example: [{}]
+      description: 'The native query was executed successfully.',
+      outputVariableName: 'report',
+      outputDescription: 'The `result` property is the result data the database sent back.  The `meta` property is reserved for custom adapter-specific extensions.',
+      example: {
+        result: '*',
+        meta: '==='
+      }
     },
 
-    error: {
-      variableName: 'error',
-      description: 'An unexpected error occured.'
+    badConnection:
+      require('../constants/badConnection.exit'),
+
+    notUnique: {
+      friendlyName: 'Not unique',
+      description: 'The provided query failed because it would violate one or more uniqueness constraints.',
+      outputVariableName: 'report',
+      outputDescription: 'The `columns` property is an array containing the names of columns with uniquness constraint violations. The `error` property is a JavaScript Error instance containing the raw error from the database.  The `meta` property is reserved for custom adapter-specific extensions.',
+      example: {
+        columns: [ 'email_address' ],
+        error: '===',
+        meta: '==='
+      }
     }
 
   },
 
 
-  fn: function sendNativeQuery(inputs, exits) {
-    var client = inputs.connection;
-    var query = inputs.compiledQuery.query;
-    var bindings = inputs.compiledQuery.bindings;
+  fn: function (inputs, exits) {
+    var util = require('util');
 
-    client.query(query, bindings, function query(err, result) {
+    // Validate provided connection.
+    if ( !util.isObject(inputs.connection) || !util.isFunction(inputs.connection.release) || !util.isObject(inputs.connection.client) ) {
+      return exits.badConnection();
+    }
+
+    // Send native query
+    inputs.connection.client.query(inputs.nativeQuery.query, inputs.nativeQuery.bindings, function query(err, result) {
       if (err) {
+        // TODO: negotiate `notUnique` error.
+        //
+        // For implementation help w/ building `columns`, see:
+        //  • https://github.com/balderdashy/sails-postgresql/blob/a51b3643777dcf1af5517acbf76e09612d36b301/lib/adapter.js#L1308
         return exits.error(err);
       }
 
-      return exits.success(result.rows);
+      return exits.success(result);
     });
   }
 

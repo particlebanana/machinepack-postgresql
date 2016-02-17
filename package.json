@@ -29,16 +29,13 @@
     "friendlyName": "Postgresql",
     "machineDir": "machines/",
     "machines": [
-      "begin-transaction",
-      "commit-transaction",
-      "compile-query",
-      "execute-query",
       "get-connection",
       "release-connection",
-      "rollback-transaction",
-      "run-query",
       "send-native-query",
-      "send-query"
+      "begin-transaction",
+      "commit-transaction",
+      "rollback-transaction",
+      "compile-statement"
     ]
   }
 }

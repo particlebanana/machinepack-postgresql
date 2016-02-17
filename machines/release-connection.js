@@ -4,22 +4,16 @@ module.exports = {
   friendlyName: 'Release connection',
 
 
-  description: 'Releases an active connection back into the pool.',
-
-
-  cacheable: false,
-
-
-  sync: true,
+  description: 'Release an active PostgreSQL database connection back to the pool.',
 
 
   inputs: {
 
-    release: {
-      description: 'The release value created when a connection was opened.',
-      example: '===',
-      required: true
-    }
+    connection:
+      require('../constants/connection.input'),
+
+    meta:
+      require('../constants/meta.input')
 
   },
 
@@ -27,20 +21,37 @@ module.exports = {
   exits: {
 
     success: {
-      variableName: 'result',
-      description: 'Done.'
+      description: 'The connection was released and is no longer active.',
+      extendedDescription: 'The provided connection may no longer be used for any subsequent queries.',
+      outputVariableName: 'report',
+      outputDescription: 'The `meta` property is reserved for custom adapter-specific extensions.',
+      example: {
+        meta: '==='
+      }
     },
 
-    error: {
-      variableName: 'error',
-      description: 'An unexpected error occured.'
-    }
+    badConnection:
+      require('../constants/badConnection.exit')
 
   },
 
 
-  fn: function releaseConnection(inputs, exits) {
-    inputs.release();
+  fn: function (inputs, exits) {
+    var util = require('util');
+
+    // Validate provided connection.
+    if ( !util.isObject(inputs.connection) || !util.isFunction(inputs.connection.release) || !util.isObject(inputs.connection.client) ) {
+      return exits.badConnection();
+    }
+
+    // Release connection.
+    try {
+      inputs.connection.release();
+    }
+    catch (e) {
+      return exits.error(e);
+    }
+
     return exits.success();
   }
 
