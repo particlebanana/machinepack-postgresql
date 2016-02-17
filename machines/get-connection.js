@@ -84,6 +84,30 @@ module.exports = {
         });
       }
 
+      // Bind "error" handler to prevent crashing the process if the database server crashes.
+      // See https://github.com/mikermcneil/waterline-query-builder/blob/master/docs/errors.md#when-a-connection-is-interrupted
+      client.on('error', function (err){
+        // For now, we log a warning when this happens.
+        console.warn('Warning: Connection to PostgreSQL database was lost. Did the database server go offline?');
+        if (err) { console.warn('Error details:',err); }
+      });
+
+      // We must also bind a handler to the module global (`pg`) in order to handle
+      // errors on the other connections live in the pool.
+      // See https://github.com/brianc/node-postgres/issues/465#issuecomment-28674266
+      // for more information.
+      //
+      // However we only bind this event handler once-- no need to bind it again and again
+      // every time a new connection is acquired. For this, we use `pg._ALREADY_BOUND_ERROR_HANDLER_FOR_POOL_IN_THIS_PROCESS`.
+      if (!pg._ALREADY_BOUND_ERROR_HANDLER_FOR_POOL_IN_THIS_PROCESS) {
+        pg._ALREADY_BOUND_ERROR_HANDLER_FOR_POOL_IN_THIS_PROCESS = true;
+        pg.on('error', function (err){
+          // For now, we log a warning when this happens.
+          console.warn('Warning: One or more pooled connections to PostgreSQL database were lost. Did the database server go offline?');
+          if (err) { console.warn('Error details:',err); }
+        });
+      }
+
       // Build the "connection" and pass it back.
       // This will be passed in to other methods in this adapter.
       var connection = {
