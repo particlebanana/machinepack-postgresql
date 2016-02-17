@@ -78,7 +78,13 @@ module.exports = {
 
     // TODO: Support special options like `meta.ssl`
     pg.connect(inputs.connectionString, function afterConnected(err, client, done) {
+      // If an error occurs,
       if (err) {
+        // Ensure the connection is actually dead
+        // (probably unnecessary but doesn't hurt-- see https://github.com/brianc/node-postgres/issues/465#issuecomment-28735745)
+        try { done(); } catch (e) {}
+
+        // Then bail w/ `failedToConnect` error.
         return exits.failedToConnect({
           error: err
         });
