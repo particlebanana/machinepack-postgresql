@@ -5,13 +5,13 @@
 
 ### [Docs](http://node-machine.org/machinepack-postgresql) &nbsp; [Browse other machines](http://node-machine.org/machinepacks) &nbsp;  [FAQ](http://node-machine.org/implementing/FAQ)  &nbsp;  [Newsgroup](https://groups.google.com/forum/?hl=en#!forum/node-machine)
 
-Run queries against a postgresql database.
+Run queries against a PostgreSQL database.
 
 
 ## Installation &nbsp; [![NPM version](https://badge.fury.io/js/machinepack-postgresql.svg)](http://badge.fury.io/js/machinepack-postgresql) [![Build Status](https://travis-ci.org/particlebanana/machinepack-postgresql.png?branch=master)](https://travis-ci.org/particlebanana/machinepack-postgresql)
 
 ```sh
-$ npm install machinepack-postgresql
+$ npm install machinepack-postgresql --save --save-exact
 ```
 
 ## Usage
