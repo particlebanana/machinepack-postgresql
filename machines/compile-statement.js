@@ -84,9 +84,13 @@ module.exports = {
       // TODO: handle `notSupported`
       // (not currently relevant for postgresql afaik, but should still get hooked up)
       ////////////////////////////////////////////////////////////////////////////////
-      success: function success(nativeQuery) {
+      success: function success(compiledNativeQuery) {
         return exits.success({
-          nativeQuery: nativeQuery
+          nativeQuery: {
+            // TODO: probably change this in mp-sql-builder so this mapping isn't necessary
+            sql: compiledNativeQuery.query,
+            bindings: compiledNativeQuery.bindings
+          }
         });
       }
     });//</generateQuery>
