@@ -32,6 +32,8 @@
       "get-connection",
       "release-connection",
       "send-native-query",
+      "parse-native-query-result",
+      "parse-native-query-error",
       "begin-transaction",
       "commit-transaction",
       "rollback-transaction",

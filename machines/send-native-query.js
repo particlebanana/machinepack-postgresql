@@ -40,19 +40,7 @@ module.exports = {
     },
 
     badConnection:
-      require('../constants/badConnection.exit'),
-
-    notUnique: {
-      friendlyName: 'Not unique',
-      description: 'The provided query failed because it would violate one or more uniqueness constraints.',
-      outputVariableName: 'report',
-      outputDescription: 'The `columns` property is an array containing the names of columns with uniquness constraint violations. The `error` property is a JavaScript Error instance containing the raw error from the database.  The `meta` property is reserved for custom adapter-specific extensions.',
-      example: {
-        columns: [ 'email_address' ],
-        error: '===',
-        meta: '==='
-      }
-    }
+      require('../constants/badConnection.exit')
 
   },
 
@@ -84,10 +72,6 @@ module.exports = {
     // Send native query
     inputs.connection.client.query(sql, bindings, function query(err, result) {
       if (err) {
-        // TODO: negotiate `notUnique` error.
-        //
-        // For implementation help w/ building `columns`, see:
-        //  • https://github.com/balderdashy/sails-postgresql/blob/a51b3643777dcf1af5517acbf76e09612d36b301/lib/adapter.js#L1308
         return exits.error(err);
       }
 
