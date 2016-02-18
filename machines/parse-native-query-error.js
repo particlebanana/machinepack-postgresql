@@ -52,30 +52,51 @@ module.exports = {
 
 
   fn: function (inputs, exits) {
+    var util = require('util');
 
+    // Local variable (`err`) for convenience.
+    var err = inputs.nativeQueryError;
+
+    // `footprint` is what will be returned by this machine.
     var footprint = { identity: 'catchall' };
+
+    // If the incoming native query error is not an object, or it is
+    // missing a `code` property, then we'll go ahead and bail out w/
+    // the "catchall" footprint to avoid continually doing these basic
+    // checks in the more detailed error negotiation below.
+    if ( !util.isObject(err) || !err.code) {
+      return exits.success({
+        footprint: footprint
+      });
+    }
+
+    // Otherwise, continue inspecting the native query error in more detail:
     switch (inputs.queryType){
       case 'select':
         break;
 
       case 'insert':
       case 'update':
-        // TODO: negotiate `notUnique` error.
-        //
-        // For implementation help w/ building `columns`, see:
-        //  • https://github.com/balderdashy/sails-postgresql/blob/a51b3643777dcf1af5517acbf76e09612d36b301/lib/adapter.js#L1308
-        // if (inputs.nativeQueryError.??????) {
-        //   footprint.identity = 'notUnique';
-        //   footprint.columns = [ 'email_address' ];
-        // }
+        // Negotiate `notUnique` error footprint.
+        // (See also: https://github.com/balderdashy/sails-postgresql/blob/a51b3643777dcf1af5517acbf76e09612d36b301/lib/adapter.js#L1308)
+        // ====================================================================
+        if (err.code === '23505') {
+          footprint.identity = 'notUnique';
+          // Now manually extract the relevant bits of the error message
+          // to build our footprint's `columns` property:
+          footprint.columns = [];
+          if ( util.isString(err.detail) ) {
+            var matches = err.detail.match(/Key \((.*)\)=\((.*)\) already exists\.$/);
+            footprint.columns.push(matches[1]);
+          }
+        }
         break;
 
       case 'delete':
         break;
 
       default:
-
-    }
+    }//</switch>
 
     return exits.success({
       footprint: footprint
