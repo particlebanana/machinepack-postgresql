@@ -17,7 +17,7 @@ module.exports = {
 
     statement: {
       description: 'A Waterline statement.',
-      extendedDescription: 'See documentation for more information.  Note that `opts` may be used for expressing adapter-specific customizations as a sibling to `from`, `where`, `select`, etc.  In other words, recursively deep within a Waterline query statement.  This is distinct from `meta`, which contains adapter-specific customizations about the statement as a whole.',
+      extendedDescription: 'See documentation for more information.  Note that `opts` may be used for expressing driver-specific customizations as a sibling to `from`, `where`, `select`, etc.  In other words, recursively deep within a Waterline query statement.  This is distinct from `meta`, which contains driver-specific customizations about the statement as a whole.',
       moreInfoUrl: 'https://github.com/particlebanana/waterline-query-builder/blob/master/docs/syntax.md',
       example: {},
       required: true
@@ -34,7 +34,7 @@ module.exports = {
     success: {
       description: 'The provided Waterline statement was compiled successfully.',
       outputVariableName: 'report',
-      outputDescription: 'The `nativeQuery` property is the compiled native query for the database.  The `meta` property is reserved for custom adapter-specific extensions.',
+      outputDescription: 'The `nativeQuery` property is the compiled native query for the database.  The `meta` property is reserved for custom driver-specific extensions.',
       example: {
         nativeQuery: '*',
         meta: '==='
@@ -44,7 +44,7 @@ module.exports = {
     malformed: {
       description: 'The provided Waterline statement could not be compiled due to malformed syntax.',
       outputVariableName: 'report',
-      outputDescription: 'The `error` property is a JavaScript error instance explaining that (or preferably even _why_) the Waterline syntax is not valid.  The `meta` property is reserved for custom adapter-specific extensions.',
+      outputDescription: 'The `error` property is a JavaScript error instance explaining that (or preferably even _why_) the Waterline syntax is not valid.  The `meta` property is reserved for custom driver-specific extensions.',
       example: {
         error: '===',
         meta: '==='
@@ -52,10 +52,10 @@ module.exports = {
     },
 
     notSupported: {
-      description: 'The provided Waterline statement could not be compiled because it is not supported by this PostgreSQL adapter.',
-      extendedDescription: 'If even one clause of the Waterline statement is not supported by the PostgreSQL adapter, the compilation of the entire statement _always fails_.',
+      description: 'The provided Waterline statement could not be compiled because it is not supported by this PostgreSQL driver.',
+      extendedDescription: 'If even one clause of the Waterline statement is not supported by the PostgreSQL driver, the compilation of the entire statement _always fails_.',
       outputVariableName: 'report',
-      outputDescription: 'The `error` property is a JavaScript error instance explaining that (or preferably even _why_) the Waterline statement is not supported.  The `meta` property is reserved for custom adapter-specific extensions.',
+      outputDescription: 'The `error` property is a JavaScript error instance explaining that (or preferably even _why_) the Waterline statement is not supported.  The `meta` property is reserved for custom driver-specific extensions.',
       example: {
         error: '===',
         meta: '==='

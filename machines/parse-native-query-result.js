@@ -41,7 +41,7 @@ module.exports = {
     success: {
       description: 'The result was successfully normalized.',
       outputVariableName: 'report',
-      outputDescription: 'The `result` property is the normalized version of the raw result originally provided.   The `meta` property is reserved for custom adapter-specific extensions.',
+      outputDescription: 'The `result` property is the normalized version of the raw result originally provided.   The `meta` property is reserved for custom driver-specific extensions.',
       example: {
         result: '*',
         meta: '==='

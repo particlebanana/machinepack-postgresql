@@ -41,7 +41,7 @@ module.exports = {
     success: {
       description: 'The normalization is complete.  If the error cannot be normalized into any other more specific footprint, then the catchall footprint will be returned.',
       outputVariableName: 'report',
-      outputDescription: 'The `footprint` property is the normalized "footprint" representing the provided raw error.  Conforms to one of a handful of standardized footprint types expected by the Waterline driver interface.   The `meta` property is reserved for custom adapter-specific extensions.',
+      outputDescription: 'The `footprint` property is the normalized "footprint" representing the provided raw error.  Conforms to one of a handful of standardized footprint types expected by the Waterline driver interface.   The `meta` property is reserved for custom driver-specific extensions.',
       example: {
         footprint: {},
         meta: '==='
@@ -78,7 +78,7 @@ module.exports = {
       case 'insert':
       case 'update':
         // Negotiate `notUnique` error footprint.
-        // (See also: https://github.com/balderdashy/sails-postgresql/blob/a51b3643777dcf1af5517acbf76e09612d36b301/lib/adapter.js#L1308)
+        // (See also: https://github.com/balderdashy/sails-postgresql/blob/a51b3643777dcf1af5517acbf76e09612d36b301/lib/driver.js#L1308)
         // ====================================================================
         if (err.code === '23505') {
           footprint.identity = 'notUnique';

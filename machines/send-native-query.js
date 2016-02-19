@@ -31,7 +31,7 @@ module.exports = {
     success: {
       description: 'The native query was executed successfully.',
       outputVariableName: 'report',
-      outputDescription: 'The `result` property is the result data the database sent back.  The `meta` property is reserved for custom adapter-specific extensions.',
+      outputDescription: 'The `result` property is the result data the database sent back.  The `meta` property is reserved for custom driver-specific extensions.',
       moreInfoUrl: 'https://github.com/brianc/node-postgres/wiki',
       example: {
         result: '*',

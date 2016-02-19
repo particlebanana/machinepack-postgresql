@@ -29,7 +29,7 @@ module.exports = {
       description: 'A connection was successfully acquired.',
       extendedDescription: 'This connection should be eventually released.  Otherwise, it may time out.  It is not a good idea to rely on database connections timing out-- be sure to release this connection when finished with it!',
       outputVariableName: 'report',
-      outputDescription: 'The `connection` property is an active connection to the database.  The `meta` property is reserved for custom adapter-specific extensions.',
+      outputDescription: 'The `connection` property is an active connection to the database.  The `meta` property is reserved for custom driver-specific extensions.',
       example: {
         connection: '===',
         meta: '==='
@@ -40,7 +40,7 @@ module.exports = {
       description: 'The provided connection string is malformed.',
       extendedDescription: 'The provided connection string is not valid for PostgreSQL.',
       outputVariableName: 'report',
-      outputDescription: 'The `error` property is a JavaScript Error instance explaining that (and preferably "why") the provided connection string is invalid.  The `meta` property is reserved for custom adapter-specific extensions.',
+      outputDescription: 'The `error` property is a JavaScript Error instance explaining that (and preferably "why") the provided connection string is invalid.  The `meta` property is reserved for custom driver-specific extensions.',
       example: {
         error: '===',
         meta: '==='
@@ -57,7 +57,7 @@ module.exports = {
       ' + this Node.js process could not connect to the database, perhaps because of firewall/proxy settings\n'+
       ' + any other miscellaneous connection error',
       outputVariableName: 'report',
-      outputDescription: 'The `error` property is a JavaScript Error instance explaining that a connection could not be made.  The `meta` property is reserved for custom adapter-specific extensions.',
+      outputDescription: 'The `error` property is a JavaScript Error instance explaining that a connection could not be made.  The `meta` property is reserved for custom driver-specific extensions.',
       example: {
         error: '===',
         meta: '==='
@@ -118,7 +118,7 @@ module.exports = {
       }
 
       // Build the "connection" and pass it back.
-      // This will be passed in to other methods in this adapter.
+      // This will be passed in to other methods in this driver.
       var connection = {
         client: client,
         release: done
