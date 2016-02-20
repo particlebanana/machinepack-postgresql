@@ -38,6 +38,11 @@
       "commit-transaction",
       "rollback-transaction",
       "compile-statement"
+    ],
+    "interfaces": [
+      "driveable",
+      "queryable",
+      "transactional"
     ]
   }
 }
