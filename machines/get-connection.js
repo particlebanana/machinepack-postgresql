@@ -17,8 +17,13 @@ module.exports = {
       required: true
     },
 
-    meta:
-      require('../constants/meta.input')
+    meta: {
+      friendlyName: 'Meta (custom)',
+      description: 'Additional PostgreSQL-specific options to use when connecting.',
+      extendedDescription: 'If specified, should be a dictionary. If there is a conflict between something provided in the connection string, and something in `meta`, the connection string takes priority.',
+      moreInfoUrl: 'https://github.com/brianc/node-postgres/wiki/Client#new-clientobject-config--client',
+      example: '==='
+    }
 
   },
 
@@ -68,16 +73,93 @@ module.exports = {
 
 
   fn: function (inputs, exits) {
+    var util = require('util');
+    var Url = require('url');
     var pg = require('pg');
 
-    // TODO: validate connection string and call `malformed` if invalid
-    // -OR-
-    // just figure out how to negotiate the problem in the error from the driver
-    // and handle it there
 
 
-    // TODO: Support special options like `meta.ssl`
-    pg.connect(inputs.connectionString, function afterConnected(err, client, done) {
+    // Build a local variable (`postgresClientConfig`) to house a dictionary
+    // of additional PostgreSQL connection options that will be passed into `.connect()`.
+    // (this is pulled from the `connectionString` and `meta` inputs, and used for
+    //  configuring stuff like `host` and `ssl`)
+    //
+    // For a complete list of available options, see:
+    //  • https://github.com/brianc/node-postgres/wiki/Client#new-clientobject-config--client
+    var postgresClientConfig = {};
+
+
+
+    // Validate and parse `meta` (if specified).
+    if ( inputs.meta ) {
+      if ( !util.isObject(inputs.meta) ) {
+        return exits.error('If provided, `meta` must be a dictionary.');
+      }
+
+      // Use properties of `meta` directly as postgres client config.
+      // (note that we're very careful to only stick a property on the client config if it was not undefined)
+      ['host', 'port', 'database', 'user', 'password', 'ssl', 'application_name', 'fallback_application_name'].forEach(function (pgClientConfKeyName){
+        if ( !util.isUndefined(inputs.meta[pgClientConfKeyName]) ) {
+          postgresClientConfig[pgClientConfKeyName] = inputs.meta[pgClientConfKeyName];
+        }
+      });
+    }
+
+
+    // Validate & parse connection string, pulling out PostgreSQL client config
+    // (call `malformed` if invalid).
+    //
+    // Remember: connection string takes priority over `meta` in the event of a conflict.
+    try {
+      var parsedConnectionStr = Url.parse(inputs.connectionString);
+
+      // Validate that a protocol was found before other pieces
+      // (otherwise other parsed info will be very weird and wrong)
+      if (!parsedConnectionStr.protocol) {
+        throw new Error('Protocol (i.e. `postgres://`) is required in connection string.');
+      }
+
+      // Parse port & host
+      if (parsedConnectionStr.port) { postgresClientConfig.port = +parsedConnectionStr.port; }
+      else { postgresClientConfig.port = 5432; }
+      if (parsedConnectionStr.hostname) { postgresClientConfig.host = parsedConnectionStr.hostname; }
+      else { postgresClientConfig.host = 'localhost'; }
+
+      // Parse user & password
+      if ( parsedConnectionStr.auth && util.isString(parsedConnectionStr.auth) ) {
+        var authPieces = parsedConnectionStr.auth.split(/:/);
+        if (authPieces[0]) {
+          postgresClientConfig.user = authPieces[0];
+        }
+        if (authPieces[1]) {
+          postgresClientConfig.password = authPieces[1];
+        }
+      }
+
+      // Parse database name
+      if (util.isString(parsedConnectionStr.pathname) ) {
+        var databaseName = parsedConnectionStr.pathname;
+        // Trim leading and trailing slashes
+        databaseName = databaseName.replace(/^\/+/, '');
+        databaseName = databaseName.replace(/\/+$/, '');
+        // If anything is left, use it as the database name.
+        if ( parsedConnectionStr.pathname ) {
+          postgresClientConfig.database = parsedConnectionStr.pathname;
+        }
+      }
+    }
+    catch (e) {
+      e.message =
+      'Provided value (`'+inputs.connectionString+'`) is not a valid PostgreSQL connection string: '+
+      e.message;
+      return exits.malformed({
+        error: e
+      });
+    }
+
+
+    // pg.connect(inputs.connectionString, function afterConnected(err, client, done) {
+    pg.connect(postgresClientConfig, function afterConnected(err, client, done) {
       // If an error occurs,
       if (err) {
         // Ensure the connection is actually dead
