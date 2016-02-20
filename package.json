@@ -9,11 +9,14 @@
     "lint": "eslint machines test"
   },
   "keywords": [
-    "Postgresql",
+    "postgresql",
+    "driver",
+    "waterline",
+    "sails",
     "machines",
     "machinepack"
   ],
-  "author": "Cody Stoltman <particlebanana@gmail.com>",
+  "author": "The Treeline Company",
   "license": "MIT",
   "dependencies": {
     "machine": "~12.0.0",
