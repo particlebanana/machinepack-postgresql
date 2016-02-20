@@ -80,17 +80,14 @@ module.exports = {
           error: err
         });
       },
-      ////////////////////////////////////////////////////////////////////////////////
-      // TODO: handle `notSupported`
-      // (not currently relevant for postgresql afaik, but should still get hooked up)
-      ////////////////////////////////////////////////////////////////////////////////
+      notSupported: function notSupported(err){
+        return exits.notSupported({
+          error: err
+        });
+      },
       success: function success(compiledNativeQuery) {
         return exits.success({
-          nativeQuery: {
-            // TODO: probably change this in mp-sql-builder so this mapping isn't necessary
-            sql: compiledNativeQuery.query,
-            bindings: compiledNativeQuery.bindings
-          }
+          nativeQuery: compiledNativeQuery
         });
       }
     });//</generateQuery>
