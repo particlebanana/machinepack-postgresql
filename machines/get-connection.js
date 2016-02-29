@@ -143,8 +143,8 @@ module.exports = {
         databaseName = databaseName.replace(/^\/+/, '');
         databaseName = databaseName.replace(/\/+$/, '');
         // If anything is left, use it as the database name.
-        if ( parsedConnectionStr.pathname ) {
-          postgresClientConfig.database = parsedConnectionStr.pathname;
+        if ( databaseName ) {
+          postgresClientConfig.database = databaseName;
         }
       }
     }
