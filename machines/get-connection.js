@@ -189,9 +189,9 @@ module.exports = {
       // for more information.
       //
       // However we only bind this event handler once-- no need to bind it again and again
-      // every time a new connection is acquired. For this, we use `pg._ALREADY_BOUND_ERROR_HANDLER_FOR_POOL_IN_THIS_PROCESS`.
-      if (!pg._ALREADY_BOUND_ERROR_HANDLER_FOR_POOL_IN_THIS_PROCESS) {
-        pg._ALREADY_BOUND_ERROR_HANDLER_FOR_POOL_IN_THIS_PROCESS = true;
+      // every time a new connection is acquired. For this, we use `pg._ALREADY_BOUND_CATCHALL_PG_ERROR_HANDLER_IN_THIS_PROCESS`.
+      if (!pg._ALREADY_BOUND_CATCHALL_PG_ERROR_HANDLER_IN_THIS_PROCESS) {
+        pg._ALREADY_BOUND_CATCHALL_PG_ERROR_HANDLER_IN_THIS_PROCESS = true;
         pg.on('error', function (err){
           // For now, we log a warning when this happens.
           console.warn('Warning: One or more pooled connections to PostgreSQL database were lost. Did the database server go offline?');
