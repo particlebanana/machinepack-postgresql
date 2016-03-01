@@ -78,10 +78,11 @@ module.exports = {
         return exits.error(err);
       }
 
-      // The other properties on `result` are not very well documented
-      // so we _could_ probably just return `result.rows`.  But just in case,
-      // and for completeness, we currently include all properties that are
-      // documented in node-postgres.  For more information, see:
+      // While we _could hypothetically_ just return `result.rows`, for
+      // completeness we currently include the other (albeit less-documented)
+      // properties send back on `result` from node-postgres; e.g. `oid`.
+      //
+      // For more information, see:
       //  • https://github.com/brianc/node-postgres/wiki/Query#result-object
       return exits.success({
         result: {
