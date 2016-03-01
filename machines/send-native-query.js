@@ -13,10 +13,13 @@ module.exports = {
       require('../constants/connection.input'),
 
     nativeQuery: {
-      description: 'A native query for the PostgreSQL database.',
-      extendedDescription: 'This is oftentimes compiled from Waterline query syntax using "Compile statement", however it could also originate from userland code.',
+      description: 'A SQL statement as a string (or to use parameterized queries, this should be provided as a dictionary).',
+      extendedDescription: 'If provided as a dictionary, this should contain `sql` (the SQL statement string; e.g. \'SELECT * FROM dogs WHERE name = $1\') as well as an array of `bindings` (e.g. [\'Rover\']).',
+      moreInfoUrl: 'https://github.com/brianc/node-postgres/wiki/Prepared-Statements#parameterized-queries',
+      whereToGet: {
+        description: 'This is oftentimes compiled from Waterline query syntax using "Compile statement", however it could also originate from userland code.',
+      },
       example: '*',
-      moreInfoUrl: 'https://github.com/brianc/node-postgres/wiki/Query#result-object',
       required: true
     },
 
@@ -32,7 +35,7 @@ module.exports = {
       description: 'The native query was executed successfully.',
       outputVariableName: 'report',
       outputDescription: 'The `result` property is the result data the database sent back.  The `meta` property is reserved for custom driver-specific extensions.',
-      moreInfoUrl: 'https://github.com/brianc/node-postgres/wiki',
+      moreInfoUrl: 'https://github.com/brianc/node-postgres/wiki/Query#result-object',
       example: {
         result: '*',
         meta: '==='
