@@ -83,11 +83,11 @@ module.exports = {
         if (err.code === '23505') {
           footprint.identity = 'notUnique';
           // Now manually extract the relevant bits of the error message
-          // to build our footprint's `columns` property:
-          footprint.columns = [];
+          // to build our footprint's `keys` property:
+          footprint.keys = [];
           if ( util.isString(err.detail) ) {
             var matches = err.detail.match(/Key \((.*)\)=\((.*)\) already exists\.$/);
-            footprint.columns.push(matches[1]);
+            footprint.keys.push(matches[1]);
           }
         }
         break;
