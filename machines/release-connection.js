@@ -37,10 +37,10 @@ module.exports = {
 
 
   fn: function (inputs, exits) {
-    var util = require('util');
+    var validateConnection = require('../helpers/validate-connection');
 
     // Validate provided connection.
-    if ( !util.isObject(inputs.connection) || !util.isFunction(inputs.connection.release) || !util.isObject(inputs.connection.client) ) {
+    if ( !validateConnection({ connection: inputs.connection }).execSync() ) {
       return exits.badConnection();
     }
 

@@ -50,13 +50,15 @@ module.exports = {
 
   fn: function (inputs, exits) {
     var util = require('util');
+    var validateConnection = require('../helpers/validate-connection');
 
     // Validate provided connection.
-    if ( !util.isObject(inputs.connection) || !util.isFunction(inputs.connection.release) || !util.isObject(inputs.connection.client) ) {
+    if ( !validateConnection({ connection: inputs.connection }).execSync() ) {
       return exits.badConnection();
     }
 
-    // Validate query
+
+    // Validate provided native query.
     // (supports raw SQL string or dictionary consisting of `sql` and `bindings` properties)
     var sql;
     var bindings;
@@ -72,7 +74,8 @@ module.exports = {
       return exits.error(new Error('Provided `nativeQuery` is invalid.  Please specify either a string of raw SQL or a dictionary like `{sql: \'SELECT * FROM dogs WHERE name = $1\', bindings: [\'Rover\']}`.'));
     }
 
-    // Send native query
+
+    // Send native query.
     inputs.connection.client.query(sql, bindings, function query(err, result) {
       if (err) {
         return exits.error(err);
@@ -90,6 +93,11 @@ module.exports = {
           rowCount: result.rowCount,
           oid: result.oid,
           rows: result.rows
+        },
+        // For flexibility, an unadulterated reference to this callback's
+        // arguments object is also exposed as `meta.rawArguments`.
+        meta: {
+          rawArguments: arguments
         }
       });
     });
