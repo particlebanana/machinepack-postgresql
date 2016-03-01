@@ -20,7 +20,7 @@ module.exports = {
       extendedDescription: 'Either "select", "insert", "delete", or "update".  This determines how the provided raw result will be parsed/coerced.',
       moreInfoUrl: 'https://github.com/particlebanana/waterline-query-builder/blob/master/docs/syntax.md',
       required: true,
-      example: 'select',// (select|insert|delete|update)
+      example: 'select'
     },
 
     nativeQueryResult: {
@@ -50,15 +50,14 @@ module.exports = {
         result: '*',
         meta: '==='
       }
-    },
+    }
 
   },
 
 
-  fn: function (inputs, exits) {
-
+  fn: function parseNativeQueryResult(inputs, exits) {
     var normalizedResult;
-    switch (inputs.queryType){
+    switch (inputs.queryType) {
       case 'select':
         normalizedResult = inputs.nativeQueryResult.rows;
         break;

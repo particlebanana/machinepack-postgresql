@@ -57,7 +57,7 @@ module.exports = {
   },
 
 
-  fn: function (inputs, exits) {
+  fn: function rollbackTransaction(inputs, exits) {
     var Pack = require('../');
 
     // Since we're using `sendNativeQuery()` to access the underlying connection,
@@ -69,7 +69,7 @@ module.exports = {
       error: function error(err) {
         return exits.error(err);
       },
-      badConnection: function badConnection(report){
+      badConnection: function badConnection(report) {
         return exits.badConnection(report);
       },
       success: function success() {

@@ -69,7 +69,7 @@ module.exports = {
   },
 
 
-  fn: function (inputs, exits) {
+  fn: function compileStatement(inputs, exits) {
     var SQLBuilder = require('machinepack-sql-builder');
 
     SQLBuilder.generateSql({
@@ -84,7 +84,7 @@ module.exports = {
           error: err
         });
       },
-      notSupported: function notSupported(err){
+      notSupported: function notSupported(err) {
         return exits.notSupported({
           error: err
         });
@@ -94,7 +94,7 @@ module.exports = {
           nativeQuery: compiledNativeQuery
         });
       }
-    });//</generateQuery>
+    });
   }
 
 

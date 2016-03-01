@@ -20,7 +20,7 @@ module.exports = {
       extendedDescription: 'Either "select", "insert", "delete", or "update".  This determines how the provided raw error will be parsed/coerced.',
       moreInfoUrl: 'https://github.com/particlebanana/waterline-query-builder/blob/master/docs/syntax.md',
       required: true,
-      example: 'select',// (select|insert|delete|update)
+      example: 'select'
     },
 
     nativeQueryError: {
@@ -50,12 +50,12 @@ module.exports = {
         footprint: {},
         meta: '==='
       }
-    },
+    }
 
   },
 
 
-  fn: function (inputs, exits) {
+  fn: function parseNativeQueryError(inputs, exits) {
     var util = require('util');
 
     // Local variable (`err`) for convenience.
@@ -68,14 +68,14 @@ module.exports = {
     // missing a `code` property, then we'll go ahead and bail out w/
     // the "catchall" footprint to avoid continually doing these basic
     // checks in the more detailed error negotiation below.
-    if ( !util.isObject(err) || !err.code) {
+    if (!util.isObject(err) || !err.code) {
       return exits.success({
         footprint: footprint
       });
     }
 
     // Otherwise, continue inspecting the native query error in more detail:
-    switch (inputs.queryType){
+    switch (inputs.queryType) {
       case 'select':
         break;
 
@@ -89,7 +89,7 @@ module.exports = {
           // Now manually extract the relevant bits of the error message
           // to build our footprint's `keys` property:
           footprint.keys = [];
-          if ( util.isString(err.detail) ) {
+          if (util.isString(err.detail)) {
             var matches = err.detail.match(/Key \((.*)\)=\((.*)\) already exists\.$/);
             footprint.keys.push(matches[1]);
           }
@@ -100,7 +100,7 @@ module.exports = {
         break;
 
       default:
-    }//</switch>
+    }
 
     return exits.success({
       footprint: footprint

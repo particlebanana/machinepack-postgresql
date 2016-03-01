@@ -54,19 +54,18 @@ module.exports = {
   },
 
 
-  fn: function (inputs, exits) {
+  fn: function releaseConnection(inputs, exits) {
     var validateConnection = require('../helpers/validate-connection');
 
     // Validate provided connection.
-    if ( !validateConnection({ connection: inputs.connection }).execSync() ) {
+    if (!validateConnection({ connection: inputs.connection }).execSync()) {
       return exits.badConnection();
     }
 
     // Release connection.
     try {
       inputs.connection.release();
-    }
-    catch (e) {
+    } catch (e) {
       return exits.error(e);
     }
 

@@ -22,7 +22,7 @@ module.exports = {
       extendedDescription: 'If provided as a dictionary, this should contain `sql` (the SQL statement string; e.g. \'SELECT * FROM dogs WHERE name = $1\') as well as an array of `bindings` (e.g. [\'Rover\']).',
       moreInfoUrl: 'https://github.com/brianc/node-postgres/wiki/Prepared-Statements#parameterized-queries',
       whereToGet: {
-        description: 'This is oftentimes compiled from Waterline query syntax using "Compile statement", however it could also originate from userland code.',
+        description: 'This is oftentimes compiled from Waterline query syntax using "Compile statement", however it could also originate from userland code.'
       },
       example: '*',
       required: true
@@ -66,12 +66,12 @@ module.exports = {
   },
 
 
-  fn: function (inputs, exits) {
+  fn: function sendNativeQuery(inputs, exits) {
     var util = require('util');
     var validateConnection = require('../helpers/validate-connection');
 
     // Validate provided connection.
-    if ( !validateConnection({ connection: inputs.connection }).execSync() ) {
+    if (!validateConnection({ connection: inputs.connection }).execSync()) {
       return exits.badConnection();
     }
 
@@ -80,16 +80,14 @@ module.exports = {
     // (supports raw SQL string or dictionary consisting of `sql` and `bindings` properties)
     var sql;
     var bindings = [];
-    if ( util.isString(inputs.nativeQuery) ) {
+    if (util.isString(inputs.nativeQuery)) {
       sql = inputs.nativeQuery;
-    }
-    else if ( util.isObject(inputs.nativeQuery) && util.isString(inputs.nativeQuery.sql) ) {
+    } else if (util.isObject(inputs.nativeQuery) && util.isString(inputs.nativeQuery.sql)) {
       sql = inputs.nativeQuery.sql;
-      if ( util.isArray(inputs.nativeQuery.bindings) ) {
+      if (util.isArray(inputs.nativeQuery.bindings)) {
         bindings = inputs.nativeQuery.bindings;
       }
-    }
-    else {
+    } else {
       return exits.error(new Error('Provided `nativeQuery` is invalid.  Please specify either a string of raw SQL or a dictionary like `{sql: \'SELECT * FROM dogs WHERE name = $1\', bindings: [\'Rover\']}`.'));
     }
 
