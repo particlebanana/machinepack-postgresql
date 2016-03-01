@@ -1,7 +1,7 @@
 {
   "name": "machinepack-postgresql",
   "version": "1.0.0-pre1",
-  "description": "Run queries against a Postgresql database.",
+  "description": "Structured Node.js bindings for Postgresql.",
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha --recursive",
     "fasttest": "node ./node_modules/mocha/bin/mocha --recursive",
@@ -9,14 +9,17 @@
     "lint": "eslint machines test"
   },
   "keywords": [
-    "Postgresql",
+    "postgresql",
+    "driver",
+    "waterline",
+    "sails",
     "machines",
     "machinepack"
   ],
-  "author": "Cody Stoltman <particlebanana@gmail.com>",
+  "author": "The Treeline Company",
   "license": "MIT",
   "dependencies": {
-    "machine": "10.4.0",
+    "machine": "~12.0.0",
     "machinepack-sql-builder": "particlebanana/waterline-query-builder",
     "pg": "4.4.6"
   },
@@ -29,16 +32,20 @@
     "friendlyName": "Postgresql",
     "machineDir": "machines/",
     "machines": [
-      "begin-transaction",
-      "commit-transaction",
-      "compile-query",
-      "execute-query",
       "get-connection",
       "release-connection",
-      "rollback-transaction",
-      "run-query",
       "send-native-query",
-      "send-query"
+      "parse-native-query-result",
+      "parse-native-query-error",
+      "begin-transaction",
+      "commit-transaction",
+      "rollback-transaction",
+      "compile-statement"
+    ],
+    "interfaces": [
+      "driveable",
+      "queryable",
+      "transactional"
     ]
   }
 }
