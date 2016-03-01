@@ -61,14 +61,15 @@ module.exports = {
     // Validate provided native query.
     // (supports raw SQL string or dictionary consisting of `sql` and `bindings` properties)
     var sql;
-    var bindings;
+    var bindings = [];
     if ( util.isString(inputs.nativeQuery) ) {
       sql = inputs.nativeQuery;
-      bindings = [];
     }
-    else if ( util.isObject(inputs.nativeQuery) && util.isString(inputs.nativeQuery.sql) && util.isArray(inputs.nativeQuery.bindings) ) {
+    else if ( util.isObject(inputs.nativeQuery) && util.isString(inputs.nativeQuery.sql) ) {
       sql = inputs.nativeQuery.sql;
-      bindings = inputs.nativeQuery.bindings;
+      if ( util.isArray(inputs.nativeQuery.bindings) ) {
+        bindings = inputs.nativeQuery.bindings;
+      }
     }
     else {
       return exits.error(new Error('Provided `nativeQuery` is invalid.  Please specify either a string of raw SQL or a dictionary like `{sql: \'SELECT * FROM dogs WHERE name = $1\', bindings: [\'Rover\']}`.'));
